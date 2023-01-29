@@ -27,6 +27,7 @@ public class RequestController {
 
         ApplicationRequestDTO responseDTO = requestService.request(requestDTO);
         if(responseDTO == null) {
+
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Unable to request from backend");
         }
 

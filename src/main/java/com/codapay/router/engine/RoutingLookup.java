@@ -5,6 +5,7 @@ public interface RoutingLookup {
     public RoutingConfig getNextRouting();
     public RoutingConfig getRoutingByInstanceId(String instanceId);
     public boolean removeRoute(String instanceId);
+    public void accumulateRouteStat(String instanceId, Integer incrementRequest, boolean successRequest);
     public boolean clearRoutes();
     public String getStatus();
 }
