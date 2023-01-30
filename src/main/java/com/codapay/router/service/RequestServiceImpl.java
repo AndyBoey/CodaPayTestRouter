@@ -7,19 +7,17 @@ import com.codapay.router.payload.ApiPayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.net.ConnectException;
 
 @Service
 public class RequestServiceImpl implements RequestService {
     @Autowired
-    private RoutingLookup lookup;
+    private RoutingLookup routingEngine;
 
     @Override
     public ApplicationRequestDTO request(ApplicationRequestDTO dto) {
@@ -29,7 +27,11 @@ public class RequestServiceImpl implements RequestService {
         boolean breakLoop = false;
 
         while (!breakLoop) {
-            routingConfig = lookup.getNextRouting();
+            // Get the next routing
+            /**
+             *  "next routing" logic is encapsulated in the RoutingLookup implementation
+             */
+            routingConfig = routingEngine.getNextRouting();
 
             if (routingConfig == null) {
                 // no configuration yet!!
@@ -37,11 +39,11 @@ public class RequestServiceImpl implements RequestService {
                 return null;
             }
             else {
-
+                // next routing found
                 System.out.println("Forwarding to instanceId " + routingConfig.getInstanceId() + ", address: " + routingConfig.getAddress());
 
                 try {
-                    responseDTO = this.forward(dto, routingConfig);
+                    responseDTO = this.forwardToApplication(dto, routingConfig);
                     breakLoop = true;
                 } catch (Exception ex) {
                     if (ex instanceof HttpServerErrorException) {
@@ -54,25 +56,29 @@ public class RequestServiceImpl implements RequestService {
                          */
                         breakLoop = true;
                     } else if (ex instanceof ConnectException) {
+                        /**
+                         * Connectivity issue, remove the route
+                         */
                         System.out.println("Removing route " + routingConfig.getInstanceId() + " due to connectivity error");
-                        lookup.removeRoute(routingConfig.getInstanceId());
+                        routingEngine.removeRoute(routingConfig.getInstanceId());
                         breakLoop = false; // loop again to try sending to another instance
                     }
                 }
             }
         }
 
+        // Statistics calculation
         if(responseDTO == null) {
-            lookup.accumulateRouteStat(routingConfig.getInstanceId(), 1, false);
+            routingEngine.accumulateRouteStat(routingConfig.getInstanceId(), 1, false);
         }
         else {
-            lookup.accumulateRouteStat(routingConfig.getInstanceId(), 1, true);
+            routingEngine.accumulateRouteStat(routingConfig.getInstanceId(), 1, true);
         }
 
         return responseDTO;
     }
 
-    protected ApplicationRequestDTO forward(ApplicationRequestDTO dto, RoutingConfig routingConfig) {
+    protected ApplicationRequestDTO forwardToApplication(ApplicationRequestDTO dto, RoutingConfig routingConfig) {
         RestTemplate restTemplate = new RestTemplate();
         ApiPayload requestPayload = new ApiPayload();
         requestPayload.setGame(dto.getGame());
