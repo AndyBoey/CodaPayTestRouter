@@ -1,0 +1,228 @@
+{
+	"info": {
+		"_postman_id": "04ebf827-e9cf-4011-b0c0-ebead05461ba",
+		"name": "Codapay Test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18110819"
+	},
+	"item": [
+		{
+			"name": "Application API (Direct)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"game\": \"Mobile Legends\",\r\n    \"gamerID\": \"1288842\",\r\n    \"points\": 20\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/application",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"application"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Application API (with routing)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"game\": \"Mobile Legends\",\r\n    \"gamerID\": \"1288842\",\r\n    \"points\": 20\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/request",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"request"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register routing",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ipAddr\": \"http://localhost:8081/application\",\r\n    \"instanceId\": \"2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/route/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"route",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clear all routing",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/route/clear",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"route",
+						"clear"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Routing status.",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/route/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"route",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Route fetch",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/route/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"route",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete route",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/route/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"route",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get application error rate",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8081/simulation/error-rate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"simulation",
+						"error-rate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set application error rate Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "20"
+				},
+				"url": {
+					"raw": "http://localhost:8084/simulation/error-rate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8084",
+					"path": [
+						"simulation",
+						"error-rate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
